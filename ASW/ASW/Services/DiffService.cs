@@ -95,20 +95,38 @@ namespace ASW.Services
         private List<string> GetDiffInsights(string left, string right)
         {
             var result = new List<string>();
+            var offset = 0;
+            var diffLength = 0;
+            var diffOffset = 0;
 
-            for (var position = 0; position < left.Length; position++)
+            //Iterate over all characters of both sides, at same time
+            while (offset < left.Length)
             {
-                var diffLength = 0;
-
-                while (position < left.Length && left[position] != right[position])
+                if (left[offset] != right[offset])
                 {
-                    diffLength = position;
-                    position++;
+                    //if chars are not equal, keep the first position of difference
+                    if (diffOffset == 0) diffOffset = offset; 
+                    
+                    //start to count difference size
+                    diffLength++;
+                }
+                else
+                {
+                    //at this position, data are equal (again). Create an insight if some difference was found
+                    if (diffLength > 0)
+                        result.Add($"Difference detected, starting at offset {diffOffset + 1} with length of {diffLength}.");
+
+                    //reset difference variables to keep searching
+                    diffLength = 0;
+                    diffOffset = 0;
                 }
 
-                if (diffLength > 0)
-                    result.Add($"Difference detected, starting at offset {position} with length of {diffLength}.");
+                offset++;
             }
+
+            //the last char might be different. If it is, create the last insight
+            if (diffLength > 0)
+                result.Add($"Difference detected, starting at offset {diffOffset + 1} with length of {diffLength}.");
 
             return result;
         }
