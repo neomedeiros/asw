@@ -3,6 +3,9 @@ using ASW.Entities.Enums;
 
 namespace ASW.Tests.Factories
 {
+    /// <summary>
+    /// Tool class following Factory Design Pattern, responsible to provide different kind of instances
+    /// </summary>
     public static class ComparisonRequestFactory
     {
         public static ComparisonRequestEntity GetSidesNull(long id)

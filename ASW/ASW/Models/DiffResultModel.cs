@@ -2,6 +2,9 @@
 
 namespace ASW.Models
 {
+    /// <summary>
+    /// Data Structure to return Diff Results to the endpoint
+    /// </summary>
     public class DiffResultModel
     {
         public DiffResultModel()

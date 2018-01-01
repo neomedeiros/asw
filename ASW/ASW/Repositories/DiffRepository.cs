@@ -5,9 +5,9 @@ using ASW.Repository;
 
 namespace ASW.Repositories
 {
-    public class ComparisonRepository : BaseRepository<ComparisonRequestEntity>, IComparisonRepository
+    public class DiffRepository : BaseRepository<ComparisonRequestEntity>, IDiffRepository
     {        
-        public ComparisonRepository(ASWContext context) : base(context) {}
+        public DiffRepository(ASWContext context) : base(context) {}
 
         public Task<ComparisonRequestEntity> Get(long id)
         {

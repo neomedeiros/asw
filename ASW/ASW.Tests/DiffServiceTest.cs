@@ -12,16 +12,16 @@ using Xunit;
 
 namespace ASW.Tests
 {
-    public class ComparisonServiceTest
+    public class DiffServiceTest
     {
-        public ComparisonServiceTest()
+        public DiffServiceTest()
         {
-            _comparisonRepositoryMock = new Mock<IComparisonRepository>();
-            _target = new ComparisonService(_comparisonRepositoryMock.Object);
+            _comparisonRepositoryMock = new Mock<IDiffRepository>();
+            _target = new DiffService(_comparisonRepositoryMock.Object);
         }
 
-        private readonly ComparisonService _target;
-        private readonly Mock<IComparisonRepository> _comparisonRepositoryMock;
+        private readonly DiffService _target;
+        private readonly Mock<IDiffRepository> _comparisonRepositoryMock;
 
         [Fact]
         public void PostDiffEntry_WHEN_id_lower_or_equal_zero_SHOULD_throw_argument_out_of_range_exception()

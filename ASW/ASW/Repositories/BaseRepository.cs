@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ASW.Repositories
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : class
+    public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
     {
         private readonly DbContext _context;
 

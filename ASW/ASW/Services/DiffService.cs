@@ -11,13 +11,13 @@ using ASW.Services.Contracts;
 
 namespace ASW.Services
 {
-    public class ComparisonService : IComparisonService
+    public class DiffService : IDiffService
     {
-        private readonly IComparisonRepository _comparisonRepository;
+        private readonly IDiffRepository _diffRepository;
 
-        public ComparisonService(IComparisonRepository comparisonRepository)
+        public DiffService(IDiffRepository diffRepository)
         {
-            _comparisonRepository = comparisonRepository;
+            _diffRepository = diffRepository;
         }
 
         public async Task PostDiffEntry(long id, Side side, string data)
@@ -25,7 +25,7 @@ namespace ASW.Services
             if (id <= 0) throw new ArgumentOutOfRangeException(nameof(id));
             if (data == null) throw new ArgumentNullException(nameof(data));
 
-            var comparisonEntity = await _comparisonRepository.Get(id);
+            var comparisonEntity = await _diffRepository.Get(id);
 
             if (comparisonEntity == null)
             {
@@ -41,29 +41,28 @@ namespace ASW.Services
             comparisonEntity.Left = side == Side.Left ? data : comparisonEntity.Left;
             comparisonEntity.Right = side == Side.Right ? data : comparisonEntity.Right;
 
-            _comparisonRepository.Update(comparisonEntity);
-            _comparisonRepository.SaveChanges();
+            _diffRepository.Update(comparisonEntity);
+            _diffRepository.SaveChanges();
         }
 
         private async Task InsertComparisonRequest(long id, Side side, string data)
         {
-            ComparisonRequestEntity comparisonEntity;
-            comparisonEntity = new ComparisonRequestEntity
+            var comparisonEntity = new ComparisonRequestEntity
             {
                 Id = id,
                 Left = side == Side.Left ? data : null,
                 Right = side == Side.Right ? data : null
             };
 
-            await _comparisonRepository.Insert(comparisonEntity);
-            await _comparisonRepository.SaveChangesAsync();
+            await _diffRepository.Insert(comparisonEntity);
+            await _diffRepository.SaveChangesAsync();
         }
 
         public async Task<DiffResultModel> Diff(long id)
         {
             if (id <= 0) throw new ArgumentOutOfRangeException(nameof(id));
 
-            var comparisonEntity = await _comparisonRepository.Get(id);
+            var comparisonEntity = await _diffRepository.Get(id);
             if (comparisonEntity == null)
                 throw new ComparisonRequestNotFoundException();
 
@@ -82,8 +81,7 @@ namespace ASW.Services
                 Left = comparisonEntity.Left
             };
 
-            if (comparisonEntity.Left.Equals(comparisonEntity.Right))
-                result.AreEqual = true;
+            if (comparisonEntity.Left.Equals(comparisonEntity.Right)) result.AreEqual = true;
 
             result.HaveSameSize = comparisonEntity.Right.Length == comparisonEntity.Left.Length;
 
@@ -100,20 +98,16 @@ namespace ASW.Services
 
             for (var position = 0; position < left.Length; position++)
             {
-
-                var leftDifferenceBuilder = new StringBuilder();
-                var rightDifferenceBuilder = new StringBuilder();
+                var diffLength = 0;
 
                 while (position < left.Length && left[position] != right[position])
                 {
-                    leftDifferenceBuilder.Append(left[position]);
-                    rightDifferenceBuilder.Append(right[position]);
-
+                    diffLength = position;
                     position++;
                 }
 
-                if (leftDifferenceBuilder.Length > 0)
-                    result.Add($"Starting at offset {position}, the left data has the value '{leftDifferenceBuilder}', and right data has '{rightDifferenceBuilder}'.");
+                if (diffLength > 0)
+                    result.Add($"Difference detected, starting at offset {position} with length of {diffLength}.");
             }
 
             return result;

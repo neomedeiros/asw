@@ -7,14 +7,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ASW.Controllers
 {
+    /// <summary>
+    /// Diff Controller. Provides the diff functionality to compare to sides of string data and retrieve the differences
+    /// </summary>
     [Route("")]
-    public class ComparisonController : Controller
+    public class DiffController : Controller
     {
-        private readonly IComparisonService _comparisonService;
+        private readonly IDiffService _diffService;
 
-        public ComparisonController(IComparisonService comparisonService)
+        public DiffController(IDiffService diffService)
         {
-            _comparisonService = comparisonService;
+            _diffService = diffService;
         }
 
         /// <summary>
@@ -28,7 +31,7 @@ namespace ASW.Controllers
         [CustomExceptionFilter]
         public async Task<ActionResult> PostLeftDiffEntry(long id, [FromBody] string data)
         {
-            await _comparisonService.PostDiffEntry(id, Side.Left, data);
+            await _diffService.PostDiffEntry(id, Side.Left, data);
             return Ok();
         }
 
@@ -42,7 +45,7 @@ namespace ASW.Controllers
         [CustomExceptionFilter]
         public async Task<ActionResult> PostRightDiffEntry(long id, [FromBody] string data)
         {
-            await _comparisonService.PostDiffEntry(id, Side.Right, data);
+            await _diffService.PostDiffEntry(id, Side.Right, data);
             return Ok();
         }
 
@@ -54,7 +57,7 @@ namespace ASW.Controllers
         [CustomExceptionFilter]
         public async Task<DiffResultModel> GetDiff(long id)
         {
-            return await _comparisonService.Diff(id);
+            return await _diffService.Diff(id);
         }
     }
 }
