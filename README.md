@@ -1,16 +1,16 @@
-# Assingment Scalable Web
+# Assignment Scalable Web
 
 API Rest to diff data asynchronously. Built using asp.net core 2.0/Microsoft Misual Studio Community Edition.
 
-Usage:
+<b>Usage:</b>
 
-1 - Post data to be diff-ed on left side
+1 - Post data to be diff-ed on left side <br />
 POST /v1/diff/{id}/left 
 
-2 - Post data to be diff-ed on right side
+2 - Post data to be diff-ed on right side <br />
 POST /v1/diff/{id}/right
 
-3 - Execute and Get the Diff Results
+3 - Execute and Get the Diff Results <br />
 GET /v1/diff/{id}
 
 Parameters
@@ -19,35 +19,37 @@ Parameters
 For POST operations, the data to be diff-ed needs to be send on POST request body, with application/json Content-Type.
 Examples:
 
-"IHsgIm5hbWUiOiJKb2huIiwgImFnZSI6MzAsICJjYXIiOm51bGwgfQ=="
+"IHsgIm5hbWUiOiJKb2huIiwgImFnZSI6MzAsICJjYXIiOm51bGwgfQ==" <br />
 (Base64 of { "name":"John", "age":30, "car":null })
 
-"IHsgIm5hbWUiOiJQZXRlIiwgImFnZSI6MzAsICJjYXIiOm51bGwgfQ=="
+"IHsgIm5hbWUiOiJQZXRlIiwgImFnZSI6MzAsICJjYXIiOm51bGwgfQ==" <br />
 (Base64 of { "name":"Pete", "age":30, "car":null })
 
-Results Example:
+<b>Results Example:</b>
 
 {
-    "id": 1,
-    "left": "IHsgIm5hbWUiOiJKb2huIiwgImFnZSI6MzAsICJjYXIiOm51bGwgfQ==",
-    "right": "IHsgIm5hbWUiOiJQZXRlIiwgImFnZSI6MzAsICJjYXIiOm51bGwgfQ==",
-    "areEqual": false,
-    "haveSameSize": true,
-    "diffInsights": [
-        "Difference detected, starting at offset 16 with length of 5."
-    ]
+    "id": 1,<br />
+    "left": "IHsgIm5hbWUiOiJKb2huIiwgImFnZSI6MzAsICJjYXIiOm51bGwgfQ==",<br />
+    "right": "IHsgIm5hbWUiOiJQZXRlIiwgImFnZSI6MzAsICJjYXIiOm51bGwgfQ==",<br />
+    "areEqual": false,<br />
+    "haveSameSize": true,<br />
+    "diffInsights": [<br />
+        "Difference detected, starting at offset 16 with length of 5."<br />
+    ]<br />
 }
 
-API Demo:
+<b>Useful links</b>
+
+API Demo:<br />
 http://leandromedeirosasw.azurewebsites.net
 
-API Documentation/Explorer: 
+API Documentation/Explorer:<br />
 http://leandromedeirosasw.azurewebsites.net/swagger
 
-Postman collection:
+Postman collection:<br />
 https://www.getpostman.com/collections/41034cb58596eb128dc0
 
-Suggestions for improvement:
+<h2>Suggestions for improvement:</h2>
 
 - For a real world scenario with a huge number of requests, I would suggest to use a Session/State storage model like "Redis" instead a
 SQL storage model. The diff data could be stored the key-value entries, setting a TTL.
